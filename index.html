@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The AI Clarity Filter - Focus Week</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:        #213644;
+      --navy-light:  #2d4a5e;
+      --navy-deep:   #172838;
+      --gold:        #C6AB7C;
+      --cream:       #FCF9DA;
+      --gold-faint:  rgba(198,171,124,0.1);
+      --gold-mid:    rgba(198,171,124,0.28);
+      --gold-strong: rgba(198,171,124,0.5);
+      --on-dark:       rgba(252,249,218,0.88);
+      --on-dark-muted: rgba(252,249,218,0.45);
+      --on-dark-dim:   rgba(252,249,218,0.25);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    .wrap { max-width: 640px; margin: 0 auto; padding: 0 28px; }
+
+    /* HEADER */
+    header {
+      padding: 56px 0 44px;
+      border-bottom: 1px solid var(--gold-mid);
+    }
+
+    .eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      animation: fadeUp 0.5s ease 0.05s forwards;
+    }
+
+    .eyebrow::after {
+      content: '';
+      height: 1px;
+      width: 48px;
+      background: var(--gold-mid);
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(34px, 6vw, 50px);
+      font-weight: 600;
+      line-height: 1.1;
+      color: var(--cream);
+      margin-bottom: 18px;
+      opacity: 0;
+      animation: fadeUp 0.5s ease 0.12s forwards;
+    }
+
+    h1 em { font-style: italic; color: var(--gold); }
+
+    .header-sub {
+      font-size: 15px;
+      color: var(--on-dark);
+      line-height: 1.8;
+      max-width: 500px;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.5s ease 0.2s forwards;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold-faint);
+      border: 1px solid var(--gold-mid);
+      border-radius: 5px;
+      padding: 9px 15px;
+      font-size: 13px;
+      color: var(--gold);
+      opacity: 0;
+      animation: fadeUp 0.5s ease 0.28s forwards;
+    }
+
+    .tag::before { content: '→'; }
+
+    /* IDEA SECTION */
+    .idea-section {
+      padding: 36px 0 32px;
+      border-bottom: 1px solid var(--gold-mid);
+    }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .idea-section h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(20px, 3vw, 26px);
+      font-weight: 500;
+      color: var(--cream);
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .idea-section p {
+      font-size: 14px;
+      color: var(--on-dark-muted);
+      margin-bottom: 18px;
+      line-height: 1.7;
+    }
+
+    .idea-input {
+      width: 100%;
+      background: var(--gold-faint);
+      border: 1px solid var(--gold-mid);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--cream);
+      outline: none;
+      resize: none;
+      min-height: 76px;
+      transition: border-color 0.2s ease;
+      line-height: 1.6;
+    }
+
+    .idea-input::placeholder { color: var(--on-dark-dim); }
+    .idea-input:focus { border-color: var(--gold); }
+
+    /* QUESTIONS */
+    .questions-section { padding: 40px 0 8px; }
+
+    .questions-header { margin-bottom: 32px; }
+
+    .questions-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(22px, 3vw, 28px);
+      font-weight: 500;
+      color: var(--cream);
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .questions-header p {
+      font-size: 14px;
+      color: var(--on-dark-muted);
+      line-height: 1.7;
+    }
+
+    .question {
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    .question.visible { opacity: 1; transform: translateY(0); }
+
+    .q-card {
+      background: var(--gold-faint);
+      border: 1px solid var(--gold-mid);
+      border-radius: 10px;
+      padding: 22px 24px;
+      transition: border-color 0.2s ease;
+    }
+
+    .q-card:hover { border-color: var(--gold-strong); }
+    .q-card.answered { border-color: var(--gold-strong); }
+
+    .q-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 10px;
+    }
+
+    .q-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--gold);
+      opacity: 0.5;
+      letter-spacing: 0.08em;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+
+    .q-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(17px, 2.5vw, 20px);
+      font-weight: 500;
+      color: var(--cream);
+      line-height: 1.35;
+    }
+
+    .q-context {
+      font-size: 13px;
+      color: var(--on-dark-muted);
+      line-height: 1.65;
+      margin-bottom: 16px;
+      padding-left: 26px;
+    }
+
+    .toggle-wrap {
+      display: flex;
+      gap: 8px;
+      padding-left: 26px;
+    }
+
+    .toggle-btn {
+      flex: 1;
+      padding: 9px 0;
+      border-radius: 5px;
+      border: 1px solid var(--gold-mid);
+      background: transparent;
+      color: var(--on-dark-muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .toggle-btn:hover { border-color: var(--gold); color: var(--cream); }
+    .toggle-btn.yes-btn.active { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+    .toggle-btn.no-btn.active { background: rgba(252,249,218,0.05); border-color: rgba(252,249,218,0.12); color: var(--on-dark-muted); }
+
+    .q-response {
+      display: none;
+      margin-top: 12px;
+      padding-left: 26px;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .q-response.yes-resp { color: var(--gold); }
+    .q-response.no-resp  { color: var(--on-dark-muted); font-style: italic; }
+    .q-response.show     { display: block; }
+
+    /* COMMITMENT FIELD - appears on no answers */
+    .commitment-wrap {
+      display: none;
+      margin-top: 14px;
+      padding-left: 26px;
+    }
+
+    .commitment-wrap.show { display: block; }
+
+    .commitment-prompt {
+      font-size: 12px;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .commitment-prompt::before {
+      content: '→';
+      font-size: 13px;
+    }
+
+    .commitment-input {
+      width: 100%;
+      background: rgba(198,171,124,0.08);
+      border: 1px solid var(--gold-mid);
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--cream);
+      outline: none;
+      transition: border-color 0.2s;
+      line-height: 1.6;
+    }
+
+    .commitment-input::placeholder { color: var(--on-dark-dim); font-style: italic; }
+    .commitment-input:focus { border-color: var(--gold); }
+
+    /* RESULT */
+    .result-section {
+      display: none;
+      padding: 44px 0;
+      border-top: 1px solid var(--gold-mid);
+      border-bottom: 1px solid var(--gold-mid);
+      margin-top: 12px;
+    }
+
+    .result-section.show { display: block; }
+
+    .result-idea-echo {
+      font-size: 12px;
+      color: var(--on-dark-muted);
+      margin-bottom: 24px;
+      font-style: italic;
+      display: none;
+    }
+
+    .result-idea-echo span { color: var(--gold); font-style: normal; }
+
+    .score-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .score-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(52px, 10vw, 72px);
+      font-weight: 600;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .score-denom {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: var(--on-dark-dim);
+      font-weight: 400;
+    }
+
+    .identity-label {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--navy);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 4px;
+      margin-bottom: 18px;
+    }
+
+    .result-verdict {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(22px, 3.5vw, 30px);
+      font-weight: 600;
+      color: var(--cream);
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+
+    .result-verdict em { font-style: italic; color: var(--gold); }
+
+    .reframe {
+      background: var(--navy-deep);
+      border-left: 2px solid var(--gold);
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 20px 0;
+    }
+
+    .reframe p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(17px, 2.5vw, 21px);
+      font-style: italic;
+      font-weight: 500;
+      color: var(--cream);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .result-body {
+      font-size: 14px;
+      color: var(--on-dark);
+      line-height: 1.8;
+    }
+
+    /* COMMITMENTS ECHO in result */
+    .commitments-echo {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .commitment-echo-item {
+      background: rgba(198,171,124,0.07);
+      border: 1px solid var(--gold-mid);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+
+    .commitment-echo-label {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .commitment-echo-text {
+      font-size: 14px;
+      color: var(--cream);
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    /* SAVE */
+    .save-section {
+      margin-top: 28px;
+      padding: 20px 22px;
+      background: var(--gold-faint);
+      border: 1px solid var(--gold-mid);
+      border-radius: 10px;
+    }
+
+    .save-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--cream);
+      margin-bottom: 4px;
+    }
+
+    .save-note {
+      font-size: 12px;
+      color: var(--on-dark-muted);
+      margin-bottom: 14px;
+    }
+
+    .save-row { display: flex; gap: 8px; }
+
+    .save-input {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--gold-mid);
+      border-radius: 5px;
+      padding: 10px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--cream);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .save-input::placeholder { color: var(--on-dark-dim); }
+    .save-input:focus { border-color: var(--gold); }
+
+    .save-btn {
+      background: var(--gold);
+      color: var(--navy);
+      border: none;
+      border-radius: 5px;
+      padding: 10px 18px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .save-btn:hover { background: var(--cream); }
+
+    .save-confirm {
+      display: none;
+      font-size: 13px;
+      color: var(--gold);
+      margin-top: 10px;
+    }
+
+    .save-confirm.show { display: block; }
+
+    .reset-btn {
+      display: inline-block;
+      margin-top: 20px;
+      font-size: 12px;
+      color: var(--on-dark-dim);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      transition: color 0.2s;
+    }
+
+    .reset-btn:hover { color: var(--gold); }
+
+    /* CTA */
+    .cta-section { padding: 48px 0 56px; }
+
+    .cta-section h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(24px, 4vw, 32px);
+      font-weight: 600;
+      color: var(--cream);
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .cta-section h2 em { font-style: italic; color: var(--gold); }
+
+    .cta-section p {
+      font-size: 15px;
+      color: var(--on-dark);
+      line-height: 1.75;
+      margin-bottom: 24px;
+      max-width: 480px;
+    }
+
+    .cta-paid { display: none; }
+    .cta-free { display: block; }
+
+    .cta-btn {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--navy);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 14px 36px;
+      border-radius: 6px;
+      transition: background 0.2s ease, transform 0.15s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .cta-btn:hover { background: var(--cream); transform: translateY(-1px); }
+
+    .cta-note {
+      display: block;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--on-dark-dim);
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--gold-mid);
+      padding: 24px 0 40px;
+    }
+
+    footer p { font-size: 12px; color: var(--on-dark-dim); }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 580px) {
+      .wrap { padding: 0 18px; }
+      header { padding: 40px 0 32px; }
+      .save-row { flex-direction: column; }
+      .save-btn { width: 100%; padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header>
+    <p class="eyebrow">Focus Week &nbsp;·&nbsp; Summit Freebie</p>
+    <h1>The AI <em>Clarity</em> Filter</h1>
+    <p class="header-sub">Before you act on any AI-generated idea, plan, or suggestion. Run it through these 5 questions. Takes 3 minutes. Tells you exactly whether it deserves your focus this week.</p>
+    <span class="tag">Think of one AI idea you are considering acting on right now</span>
+  </header>
+
+  <!-- IDEA INPUT -->
+  <div class="idea-section">
+    <span class="section-label">Step 1: Name the idea</span>
+    <h2>What is the AI idea or suggestion you are considering?</h2>
+    <p>Write it in one sentence. The more specific, the sharper your result will be.</p>
+    <textarea class="idea-input" id="ideaInput" placeholder="e.g. AI suggested I promote my Pinterest pins this week to drive more traffic to my site..."></textarea>
+  </div>
+
+  <!-- QUESTIONS -->
+  <div class="questions-section">
+    <div class="questions-header">
+      <span class="section-label">Step 2: Run the filter</span>
+      <h2>Answer yes or no for each question.</h2>
+      <p>Answer honestly, not hopefully. If you answer no, a follow-up will appear to help you turn it into a commitment.</p>
+    </div>
+
+    <!-- Q1 -->
+    <div class="question" data-q="1">
+      <div class="q-card">
+        <div class="q-top">
+          <span class="q-num">01</span>
+          <p class="q-text">Does this move the one thing that is most stuck in your business right now?</p>
+        </div>
+        <p class="q-context">Not something interesting. Not something you could do. The specific thing that, if it moved, would change how this week feels.</p>
+        <div class="toggle-wrap">
+          <button class="toggle-btn yes-btn" data-q="1" data-val="yes">Yes</button>
+          <button class="toggle-btn no-btn" data-q="1" data-val="no">No</button>
+        </div>
+        <p class="q-response yes-resp" data-q="1" data-type="yes">Good. It is pointed at the right target.</p>
+        <p class="q-response no-resp" data-q="1" data-type="no">If it is not moving the stuck thing, it is a distraction this week, even if it is a good idea.</p>
+        <div class="commitment-wrap" data-q="1">
+          <p class="commitment-prompt">What is the one thing that is actually stuck right now?</p>
+          <input type="text" class="commitment-input" data-q="1" placeholder="e.g. My content is not reaching new people outside my existing audience..." />
+        </div>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="question" data-q="2">
+      <div class="q-card">
+        <div class="q-top">
+          <span class="q-num">02</span>
+          <p class="q-text">Can you finish this in the time you actually have this week?</p>
+        </div>
+        <p class="q-context">Not ideal time. Not if everything goes well. The realistic hours available between now and the end of the week.</p>
+        <div class="toggle-wrap">
+          <button class="toggle-btn yes-btn" data-q="2" data-val="yes">Yes</button>
+          <button class="toggle-btn no-btn" data-q="2" data-val="no">No</button>
+        </div>
+        <p class="q-response yes-resp" data-q="2" data-type="yes">It fits. Keep going.</p>
+        <p class="q-response no-resp" data-q="2" data-type="no">An idea you cannot finish this week is a distraction this week. It belongs in a future list.</p>
+        <div class="commitment-wrap" data-q="2">
+          <p class="commitment-prompt">What is the smallest version of this you could actually finish this week?</p>
+          <input type="text" class="commitment-input" data-q="2" placeholder="e.g. Instead of a full campaign, I will promote just two pins and see what moves..." />
+        </div>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="question" data-q="3">
+      <div class="q-card">
+        <div class="q-top">
+          <span class="q-num">03</span>
+          <p class="q-text">Will you know by Friday whether it worked?</p>
+        </div>
+        <p class="q-context">There should be a clear signal, a number, a response, a visible result, that tells you if this was the right move. No signal means no plan. Just a hope.</p>
+        <div class="toggle-wrap">
+          <button class="toggle-btn yes-btn" data-q="3" data-val="yes">Yes</button>
+          <button class="toggle-btn no-btn" data-q="3" data-val="no">No</button>
+        </div>
+        <p class="q-response yes-resp" data-q="3" data-type="yes">It is testable. That is what makes it worth doing.</p>
+        <p class="q-response no-resp" data-q="3" data-type="no">Name the signal before you start so you are not guessing at the end of the week.</p>
+        <div class="commitment-wrap" data-q="3">
+          <p class="commitment-prompt">What will you watch to know if this is moving in the right direction?</p>
+          <input type="text" class="commitment-input" data-q="3" placeholder="e.g. I will watch impressions and click-throughs. If both move up by Friday, it is working..." />
+        </div>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="question" data-q="4">
+      <div class="q-card">
+        <div class="q-top">
+          <span class="q-num">04</span>
+          <p class="q-text">Is this your idea, or just a good-sounding AI suggestion?</p>
+        </div>
+        <p class="q-context">AI knows patterns. It does not know your business, your energy, or where you actually are right now. A suggestion that sounds right is not the same as one that is right for you.</p>
+        <div class="toggle-wrap">
+          <button class="toggle-btn yes-btn" data-q="4" data-val="yes">It is mine</button>
+          <button class="toggle-btn no-btn" data-q="4" data-val="no">Not sure</button>
+        </div>
+        <p class="q-response yes-resp" data-q="4" data-type="yes">You own it. That matters more than it sounds.</p>
+        <p class="q-response no-resp" data-q="4" data-type="no">Ask yourself what you would do if AI had not suggested this. That answer tells you everything.</p>
+        <div class="commitment-wrap" data-q="4">
+          <p class="commitment-prompt">What would you focus on this week if AI had not suggested this?</p>
+          <input type="text" class="commitment-input" data-q="4" placeholder="e.g. I would probably work on improving my email open rates..." />
+        </div>
+      </div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="question" data-q="5">
+      <div class="q-card">
+        <div class="q-top">
+          <span class="q-num">05</span>
+          <p class="q-text">If you do this and nothing else this week, will you feel like the week moved something forward?</p>
+        </div>
+        <p class="q-context">Strip everything else away. If this one thing gets done and nothing else does. Is that a week worth having?</p>
+        <div class="toggle-wrap">
+          <button class="toggle-btn yes-btn" data-q="5" data-val="yes">Yes</button>
+          <button class="toggle-btn no-btn" data-q="5" data-val="no">No</button>
+        </div>
+        <p class="q-response yes-resp" data-q="5" data-type="yes">That is the answer. This deserves your focus this week.</p>
+        <p class="q-response no-resp" data-q="5" data-type="no">Then this is not the right thing. The week should feel like it moved something, not just like it was busy.</p>
+        <div class="commitment-wrap" data-q="5">
+          <p class="commitment-prompt">What would make this week feel like it actually moved something forward?</p>
+          <input type="text" class="commitment-input" data-q="5" placeholder="e.g. If I finally got my first piece of content in front of people who do not already follow me..." />
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-section" id="resultSection">
+    <span class="section-label">Your Result</span>
+    <p class="result-idea-echo" id="ideaEcho"></p>
+    <div class="score-row">
+      <span class="score-num" id="scoreNum">0</span>
+      <span class="score-denom">/ 5</span>
+    </div>
+    <span class="identity-label" id="identityLabel"></span>
+    <p class="result-verdict" id="resultVerdict"></p>
+    <div class="reframe"><p id="reframeText"></p></div>
+    <p class="result-body" id="resultBody"></p>
+    <div class="commitments-echo" id="commitmentsEcho"></div>
+
+    <button class="reset-btn" id="resetBtn">Run a different idea through the filter</button>
+  </div>
+
+  <footer>
+    <p>Focus Week - Built for digital product creators</p>
+  </footer>
+
+</div>
+
+<script>
+  const answers = {};
+  const commitments = {};
+
+  // Scroll reveal
+  const qs = document.querySelectorAll('.question');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 90);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  qs.forEach(q => obs.observe(q));
+
+  // Commitment inputs - save as typed
+  document.querySelectorAll('.commitment-input').forEach(input => {
+    input.addEventListener('input', () => {
+      commitments[input.dataset.q] = input.value.trim();
+    });
+  });
+
+  // Toggles
+  document.querySelectorAll('.toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const q = btn.dataset.q;
+      const val = btn.dataset.val;
+
+      document.querySelectorAll(`.toggle-btn[data-q="${q}"]`).forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      document.querySelectorAll(`.q-response[data-q="${q}"]`).forEach(r => r.classList.remove('show'));
+      const resp = document.querySelector(`.q-response[data-q="${q}"][data-type="${val}"]`);
+      if (resp) resp.classList.add('show');
+
+      const card = btn.closest('.q-card');
+      if (card) card.classList.add('answered');
+
+      // Show or hide commitment field
+      const cWrap = document.querySelector(`.commitment-wrap[data-q="${q}"]`);
+      if (cWrap) {
+        if (val === 'no') {
+          cWrap.classList.add('show');
+        } else {
+          cWrap.classList.remove('show');
+          // Clear commitment if they switch to yes
+          const cInput = cWrap.querySelector('.commitment-input');
+          if (cInput) cInput.value = '';
+          delete commitments[q];
+        }
+      }
+
+      answers[q] = val;
+
+      if (Object.keys(answers).length === 5) {
+        setTimeout(showResult, 300);
+      }
+    });
+  });
+
+  // Commitment labels for echo
+  const commitmentLabels = {
+    1: 'What is actually stuck',
+    2: 'Smallest version this week',
+    3: 'Signal you will watch',
+    4: 'What you would do without AI',
+    5: 'What would make the week matter'
+  };
+
+  function showResult() {
+    const yes = Object.values(answers).filter(v => v === 'yes').length;
+    const idea = document.getElementById('ideaInput').value.trim();
+
+    // Echo idea
+    const echo = document.getElementById('ideaEcho');
+    if (idea) {
+      echo.innerHTML = `Filtering: <span>"${idea}"</span>`;
+      echo.style.display = 'block';
+    } else {
+      echo.style.display = 'none';
+    }
+
+    document.getElementById('scoreNum').textContent = yes;
+
+    // Identity + verdict + reframe + body
+    let label, verdict, reframe, body;
+
+    if (yes === 5) {
+      label = 'The Executor';
+      verdict = 'This is the right move. Stop thinking and start.';
+      reframe = 'You are not using AI to generate ideas. You are using it to move the work forward. That is the difference.';
+      body = 'Every question passed. This idea is yours, it fits your week, it is measurable, and it is pointed at the right target. The only thing left to do is start.';
+    } else if (yes === 4) {
+      label = 'Almost Clear';
+      verdict = 'One thing is off. Your commitment below tells you exactly what to resolve first.';
+      reframe = 'A plan with one unresolved question is not a plan yet. Your answer below turns it into one.';
+      body = 'You are close. Address what you wrote in the follow-up field and this becomes a yes. Do not skip that step.';
+    } else if (yes === 3) {
+      label = 'The Scatter Pattern';
+      verdict = 'This idea is pulling your attention. It is not earning it yet.';
+      reframe = 'AI gave you something that sounds right. Your business needs something that is right. Those are not always the same thing.';
+      body = 'Three yes answers means this has appeal. But appeal is not the same as fit. Look at what you wrote in the follow-up fields. That is where the real work is this week.';
+    } else {
+      label = 'Borrowed Focus';
+      verdict = 'This is not your priority. It is an AI suggestion wearing your week.';
+      reframe = 'The most expensive thing AI can do is make a distraction feel productive.';
+      body = 'This idea came from a pattern AI recognized, not from your read on what your business needs right now. What you wrote in the follow-up fields is closer to your real priority. Start there.';
+    }
+
+    document.getElementById('identityLabel').textContent = label;
+    document.getElementById('resultVerdict').textContent = verdict;
+    document.getElementById('reframeText').textContent = reframe;
+    document.getElementById('resultBody').textContent = body;
+
+    // Echo commitments
+    const echoWrap = document.getElementById('commitmentsEcho');
+    echoWrap.innerHTML = '';
+    const noQs = Object.entries(answers).filter(([k,v]) => v === 'no').map(([k]) => k);
+
+    if (noQs.length > 0) {
+      noQs.forEach(q => {
+        const text = commitments[q];
+        const lbl = commitmentLabels[q];
+        const placeholder = text ? text : 'Not filled in. Worth coming back to.';
+        echoWrap.innerHTML += `
+          <div class="commitment-echo-item">
+            <span class="commitment-echo-label">${lbl}</span>
+            <p class="commitment-echo-text">${placeholder}</p>
+          </div>`;
+      });
+    }
+
+    const section = document.getElementById('resultSection');
+    section.classList.add('show');
+    setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+  }
+
+  // CTA save result
+  const ctaBtn = document.getElementById('ctaBtn');
+  if (ctaBtn) {
+    ctaBtn.addEventListener('click', () => {
+      const email = document.getElementById('ctaEmail').value.trim();
+      if (!email || !email.includes('@')) return;
+      window.location.href = `https://align-with-clarity.kit.com/2ce6d87e63?email=${encodeURIComponent(email)}`;
+    });
+  }
+
+  // Reset
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    Object.keys(answers).forEach(k => delete answers[k]);
+    Object.keys(commitments).forEach(k => delete commitments[k]);
+    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.q-response').forEach(r => r.classList.remove('show'));
+    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('answered'));
+    document.querySelectorAll('.commitment-wrap').forEach(w => w.classList.remove('show'));
+    document.querySelectorAll('.commitment-input').forEach(i => i.value = '');
+    document.getElementById('resultSection').classList.remove('show');
+    document.getElementById('saveEmail').value = '';
+    document.getElementById('saveEmail').disabled = false;
+    document.getElementById('saveBtn').disabled = false;
+    document.getElementById('saveBtn').style.opacity = '1';
+    document.getElementById('saveConfirm').classList.remove('show');
+    const ctaEmail = document.getElementById('ctaEmail');
+    document.getElementById('ideaInput').value = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>
