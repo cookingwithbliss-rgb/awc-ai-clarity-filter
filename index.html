@@ -37,7 +37,6 @@
 
     .wrap { max-width: 640px; margin: 0 auto; padding: 0 28px; }
 
-    /* HEADER */
     header {
       padding: 56px 0 44px;
       border-bottom: 1px solid var(--gold-mid);
@@ -57,12 +56,7 @@
       animation: fadeUp 0.5s ease 0.05s forwards;
     }
 
-    .eyebrow::after {
-      content: '';
-      height: 1px;
-      width: 48px;
-      background: var(--gold-mid);
-    }
+    .eyebrow::after { content: ''; height: 1px; width: 48px; background: var(--gold-mid); }
 
     h1 {
       font-family: 'Cormorant Garamond', serif;
@@ -78,13 +72,14 @@
     h1 em { font-style: italic; color: var(--gold); }
 
     .header-sub {
-      font-size: 15px;
+      font-size: 16px;
       color: var(--on-dark);
-      line-height: 1.8;
+      line-height: 1.7;
       max-width: 500px;
       margin-bottom: 24px;
       opacity: 0;
       animation: fadeUp 0.5s ease 0.2s forwards;
+      font-weight: 400;
     }
 
     .tag {
@@ -103,20 +98,9 @@
 
     .tag::before { content: '→'; }
 
-    /* IDEA SECTION */
     .idea-section {
       padding: 36px 0 32px;
       border-bottom: 1px solid var(--gold-mid);
-    }
-
-    .section-label {
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      font-weight: 500;
-      margin-bottom: 14px;
-      display: block;
     }
 
     .idea-section h2 {
@@ -148,15 +132,46 @@
       outline: none;
       resize: none;
       min-height: 76px;
-      transition: border-color 0.2s ease;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
       line-height: 1.6;
     }
 
     .idea-input::placeholder { color: var(--on-dark-dim); }
-    .idea-input:focus { border-color: var(--gold); }
+    .idea-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(198,171,124,0.15); }
 
-    /* QUESTIONS */
-    .questions-section { padding: 40px 0 8px; }
+    .idea-prompt {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--on-dark-dim);
+      transition: opacity 0.3s ease;
+    }
+
+    .idea-prompt.hidden { opacity: 0; pointer-events: none; }
+
+    .idea-prompt-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold-mid);
+      flex-shrink: 0;
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+
+    @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+    .questions-section {
+      padding: 40px 0 8px;
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: opacity 0.5s ease, max-height 0.6s ease;
+      pointer-events: none;
+    }
+
+    .questions-section.revealed { opacity: 1; max-height: 9999px; pointer-events: all; }
 
     .questions-header { margin-bottom: 32px; }
 
@@ -169,11 +184,7 @@
       margin-bottom: 8px;
     }
 
-    .questions-header p {
-      font-size: 14px;
-      color: var(--on-dark-muted);
-      line-height: 1.7;
-    }
+    .questions-header p { font-size: 14px; color: var(--on-dark-muted); line-height: 1.7; }
 
     .question {
       margin-bottom: 20px;
@@ -195,12 +206,22 @@
     .q-card:hover { border-color: var(--gold-strong); }
     .q-card.answered { border-color: var(--gold-strong); }
 
-    .q-top {
+    .q-progress {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--on-dark-dim);
+      font-weight: 500;
+      margin-bottom: 14px;
       display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      margin-bottom: 10px;
+      align-items: center;
+      gap: 10px;
     }
+
+    .q-progress-bar { flex: 1; height: 2px; background: var(--gold-mid); border-radius: 1px; overflow: hidden; }
+    .q-progress-fill { height: 100%; background: var(--gold); border-radius: 1px; }
+
+    .q-top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 10px; }
 
     .q-num {
       font-family: 'Cormorant Garamond', serif;
@@ -221,19 +242,9 @@
       line-height: 1.35;
     }
 
-    .q-context {
-      font-size: 13px;
-      color: var(--on-dark-muted);
-      line-height: 1.65;
-      margin-bottom: 16px;
-      padding-left: 26px;
-    }
+    .q-context { font-size: 13px; color: var(--on-dark-muted); line-height: 1.65; margin-bottom: 16px; padding-left: 26px; }
 
-    .toggle-wrap {
-      display: flex;
-      gap: 8px;
-      padding-left: 26px;
-    }
+    .toggle-wrap { display: flex; gap: 8px; padding-left: 26px; }
 
     .toggle-btn {
       flex: 1;
@@ -255,25 +266,26 @@
     .toggle-btn.yes-btn.active { background: var(--gold); border-color: var(--gold); color: var(--navy); }
     .toggle-btn.no-btn.active { background: rgba(252,249,218,0.05); border-color: rgba(252,249,218,0.12); color: var(--on-dark-muted); }
 
-    .q-response {
-      display: none;
-      margin-top: 12px;
-      padding-left: 26px;
-      font-size: 13px;
-      line-height: 1.65;
-    }
-
+    .q-response { display: none; margin-top: 12px; padding-left: 26px; font-size: 13px; line-height: 1.65; }
     .q-response.yes-resp { color: var(--gold); }
     .q-response.no-resp  { color: var(--on-dark-muted); font-style: italic; }
     .q-response.show     { display: block; }
 
-    /* COMMITMENT FIELD - appears on no answers */
-    .commitment-wrap {
+    .q-meaning {
       display: none;
-      margin-top: 14px;
-      padding-left: 26px;
+      margin-top: 8px;
+      margin-left: 26px;
+      padding: 8px 12px;
+      font-size: 12px;
+      color: var(--on-dark-muted);
+      line-height: 1.65;
+      font-style: italic;
+      border-left: 2px solid var(--gold-mid);
     }
 
+    .q-meaning.show { display: block; }
+
+    .commitment-wrap { display: none; margin-top: 14px; padding-left: 26px; }
     .commitment-wrap.show { display: block; }
 
     .commitment-prompt {
@@ -286,10 +298,7 @@
       gap: 6px;
     }
 
-    .commitment-prompt::before {
-      content: '→';
-      font-size: 13px;
-    }
+    .commitment-prompt::before { content: '→'; font-size: 13px; }
 
     .commitment-input {
       width: 100%;
@@ -302,334 +311,146 @@
       font-weight: 300;
       color: var(--cream);
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
       line-height: 1.6;
     }
 
     .commitment-input::placeholder { color: var(--on-dark-dim); font-style: italic; }
-    .commitment-input:focus { border-color: var(--gold); }
+    .commitment-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(198,171,124,0.12); }
 
-    /* RESULT */
-    .result-section {
-      display: none;
-      padding: 44px 0;
-      border-top: 1px solid var(--gold-mid);
-      border-bottom: 1px solid var(--gold-mid);
-      margin-top: 12px;
+    .see-result-wrap { display: none; padding: 32px 0 8px; text-align: center; }
+    .see-result-wrap.show { display: block; }
+
+    .see-result-btn {
+      background: var(--gold);
+      color: var(--navy);
+      border: none;
+      border-radius: 8px;
+      padding: 14px 40px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease;
     }
 
+    .see-result-btn:hover { background: var(--cream); transform: translateY(-1px); }
+
+    .see-result-note { display: block; margin-top: 10px; font-size: 13px; font-weight: 500; color: var(--gold); line-height: 1.5; }
+    .see-result-note.all-clear { color: var(--on-dark-muted); font-weight: 300; }
+
+    .result-section { display: none; padding: 44px 0; border-top: 1px solid var(--gold-mid); border-bottom: 1px solid var(--gold-mid); margin-top: 12px; }
     .result-section.show { display: block; }
 
-    .result-idea-echo {
-      font-size: 12px;
-      color: var(--on-dark-muted);
-      margin-bottom: 24px;
-      font-style: italic;
-      display: none;
-    }
+    .focus-box { background: var(--gold); border-radius: 10px; padding: 20px 24px; margin-bottom: 28px; }
+    .focus-box-label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--navy); font-weight: 500; margin-bottom: 8px; display: block; opacity: 0.65; }
+    .focus-box-text { font-family: 'Cormorant Garamond', serif; font-size: clamp(18px, 2.8vw, 22px); font-weight: 600; color: var(--navy); line-height: 1.35; }
 
+    .result-idea-echo { font-size: 12px; color: var(--on-dark-muted); margin-bottom: 20px; font-style: italic; display: none; }
     .result-idea-echo span { color: var(--gold); font-style: normal; }
 
-    .score-row {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
+    .result-nudge { display: none; background: rgba(198,171,124,0.15); border: 1px solid var(--gold); border-radius: 8px; padding: 14px 16px; font-size: 14px; font-weight: 500; color: var(--cream); line-height: 1.65; margin-bottom: 20px; }
+    .result-nudge.show { display: block; }
 
-    .score-num {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(52px, 10vw, 72px);
-      font-weight: 600;
-      color: var(--gold);
-      line-height: 1;
-    }
+    .score-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+    .score-num { font-family: 'Cormorant Garamond', serif; font-size: clamp(52px, 10vw, 72px); font-weight: 600; color: var(--gold); line-height: 1; }
+    .score-denom { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--on-dark-dim); font-weight: 400; }
+    .score-interpretation { font-size: 13px; color: var(--on-dark-muted); margin-bottom: 16px; }
 
-    .score-denom {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 22px;
-      color: var(--on-dark-dim);
-      font-weight: 400;
-    }
+    .identity-label { display: inline-block; background: var(--gold); color: var(--navy); font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 14px; border-radius: 4px; margin-bottom: 18px; }
 
-    .identity-label {
-      display: inline-block;
-      background: var(--gold);
-      color: var(--navy);
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 6px 14px;
-      border-radius: 4px;
-      margin-bottom: 18px;
-    }
+    .result-verdict { font-family: 'Cormorant Garamond', serif; font-size: clamp(22px, 3.5vw, 30px); font-weight: 600; color: var(--cream); line-height: 1.25; margin-bottom: 12px; }
 
-    .result-verdict {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(22px, 3.5vw, 30px);
-      font-weight: 600;
-      color: var(--cream);
-      line-height: 1.25;
-      margin-bottom: 12px;
-    }
+    .reframe-wrap { margin: 20px 0; }
+    .reframe-label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 8px; display: block; }
 
-    .result-verdict em { font-style: italic; color: var(--gold); }
+    .reframe { background: var(--navy-deep); border-left: 2px solid var(--gold); border-radius: 0 8px 8px 0; padding: 16px 20px; position: relative; }
+    .reframe p { font-family: 'Cormorant Garamond', serif; font-size: clamp(17px, 2.5vw, 21px); font-style: italic; font-weight: 500; color: var(--cream); line-height: 1.5; margin: 0; padding-right: 52px; }
 
-    .reframe {
-      background: var(--navy-deep);
-      border-left: 2px solid var(--gold);
-      border-radius: 0 8px 8px 0;
-      padding: 16px 20px;
-      margin: 20px 0;
-    }
+    .copy-btn { position: absolute; top: 12px; right: 12px; background: transparent; border: 1px solid var(--gold-mid); border-radius: 4px; padding: 5px 10px; font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 500; color: var(--gold); cursor: pointer; letter-spacing: 0.06em; text-transform: uppercase; transition: all 0.16s ease; }
+    .copy-btn:hover { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+    .copy-btn.copied { background: var(--gold); color: var(--navy); border-color: var(--gold); }
 
-    .reframe p {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(17px, 2.5vw, 21px);
-      font-style: italic;
-      font-weight: 500;
-      color: var(--cream);
-      line-height: 1.5;
-      margin: 0;
-    }
+    .result-next { background: var(--navy-deep); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 16px 18px; margin-top: 16px; }
+    .result-next-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); font-weight: 500; display: block; margin-bottom: 6px; }
+    .result-next-text { font-size: 14px; color: var(--on-dark); line-height: 1.75; }
 
-    .result-body {
-      font-size: 14px;
-      color: var(--on-dark);
-      line-height: 1.8;
-    }
+    .commitments-echo { margin-top: 24px; display: flex; flex-direction: column; gap: 10px; }
 
-    /* COMMITMENTS ECHO in result */
-    .commitments-echo {
-      margin-top: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+    .commitment-echo-item { background: rgba(198,171,124,0.07); border: 1px solid var(--gold-mid); border-radius: 8px; padding: 14px 16px; }
+    .commitment-echo-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 5px; display: block; }
+    .commitment-echo-text { font-size: 14px; color: var(--cream); line-height: 1.6; font-style: italic; }
 
-    .commitment-echo-item {
-      background: rgba(198,171,124,0.07);
-      border: 1px solid var(--gold-mid);
-      border-radius: 8px;
-      padding: 14px 16px;
-    }
-
-    .commitment-echo-label {
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gold);
-      font-weight: 500;
-      margin-bottom: 5px;
-      display: block;
-    }
-
-    .commitment-echo-text {
-      font-size: 14px;
-      color: var(--cream);
-      line-height: 1.6;
-      font-style: italic;
-    }
-
-    /* SAVE */
-    .save-section {
-      margin-top: 28px;
-      padding: 20px 22px;
-      background: var(--gold-faint);
-      border: 1px solid var(--gold-mid);
-      border-radius: 10px;
-    }
-
-    .save-label {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--cream);
-      margin-bottom: 4px;
-    }
-
-    .save-note {
-      font-size: 12px;
-      color: var(--on-dark-muted);
-      margin-bottom: 14px;
-    }
-
-    .save-row { display: flex; gap: 8px; }
-
-    .save-input {
-      flex: 1;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--gold-mid);
-      border-radius: 5px;
-      padding: 10px 14px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      color: var(--cream);
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .save-input::placeholder { color: var(--on-dark-dim); }
-    .save-input:focus { border-color: var(--gold); }
-
-    .save-btn {
-      background: var(--gold);
-      color: var(--navy);
-      border: none;
-      border-radius: 5px;
-      padding: 10px 18px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.2s;
-    }
-
-    .save-btn:hover { background: var(--cream); }
-
-    .save-confirm {
-      display: none;
-      font-size: 13px;
-      color: var(--gold);
-      margin-top: 10px;
-    }
-
-    .save-confirm.show { display: block; }
-
-    .reset-btn {
-      display: inline-block;
-      margin-top: 20px;
-      font-size: 12px;
-      color: var(--on-dark-dim);
-      text-decoration: underline;
-      text-underline-offset: 3px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      font-family: 'DM Sans', sans-serif;
-      transition: color 0.2s;
-    }
-
+    .reset-wrap { margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--gold-mid); text-align: center; }
+    .reset-label { font-size: 13px; color: var(--on-dark-muted); margin-bottom: 12px; }
+    .reset-btn { display: inline-block; font-size: 12px; color: var(--on-dark-dim); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; background: none; border: none; font-family: 'DM Sans', sans-serif; transition: color 0.2s; }
     .reset-btn:hover { color: var(--gold); }
 
-    /* CTA */
-    .cta-section { padding: 48px 0 56px; }
+    .reset-confirm { display: none; margin-top: 12px; flex-direction: column; align-items: center; gap: 8px; }
+    .reset-confirm.show { display: flex; }
+    .reset-confirm-note { font-size: 12px; color: var(--on-dark-muted); font-style: italic; margin-bottom: 4px; }
+    .reset-confirm-btns { display: flex; gap: 10px; }
 
-    .cta-section h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(24px, 4vw, 32px);
-      font-weight: 600;
-      color: var(--cream);
-      line-height: 1.2;
-      margin-bottom: 12px;
-    }
+    .reset-confirm-yes, .reset-confirm-no { padding: 8px 20px; border-radius: 5px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; cursor: pointer; letter-spacing: 0.06em; text-transform: uppercase; transition: all 0.16s ease; }
+    .reset-confirm-yes { background: transparent; border: 1px solid var(--gold-mid); color: var(--on-dark-muted); }
+    .reset-confirm-yes:hover { border-color: var(--gold); color: var(--cream); }
+    .reset-confirm-no { background: var(--gold); border: 1px solid var(--gold); color: var(--navy); }
+    .reset-confirm-no:hover { background: var(--cream); border-color: var(--cream); }
 
-    .cta-section h2 em { font-style: italic; color: var(--gold); }
+    footer { border-top: 1px solid var(--gold-mid); padding: 28px 0 48px; text-align: center; }
+    footer p { font-size: 13px; color: var(--on-dark-muted); font-style: italic; }
 
-    .cta-section p {
-      font-size: 15px;
-      color: var(--on-dark);
-      line-height: 1.75;
-      margin-bottom: 24px;
-      max-width: 480px;
-    }
-
-    .cta-paid { display: none; }
-    .cta-free { display: block; }
-
-    .cta-btn {
-      display: inline-block;
-      background: var(--gold);
-      color: var(--navy);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      text-decoration: none;
-      padding: 14px 36px;
-      border-radius: 6px;
-      transition: background 0.2s ease, transform 0.15s ease;
-      border: none;
-      cursor: pointer;
-    }
-
-    .cta-btn:hover { background: var(--cream); transform: translateY(-1px); }
-
-    .cta-note {
-      display: block;
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--on-dark-dim);
-    }
-
-    /* FOOTER */
-    footer {
-      border-top: 1px solid var(--gold-mid);
-      padding: 24px 0 40px;
-    }
-
-    footer p { font-size: 12px; color: var(--on-dark-dim); }
-
-    @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
     @media (max-width: 580px) {
       .wrap { padding: 0 18px; }
       header { padding: 40px 0 32px; }
-      .save-row { flex-direction: column; }
-      .save-btn { width: 100%; padding: 12px; }
     }
   </style>
 </head>
 <body>
 <div class="wrap">
 
-  <!-- HEADER -->
   <header>
     <p class="eyebrow">Focus Week &nbsp;·&nbsp; Summit Freebie</p>
     <h1>The AI <em>Clarity</em> Filter</h1>
-    <p class="header-sub">Before you act on any AI-generated idea, plan, or suggestion. Run it through these 5 questions. Takes 3 minutes. Tells you exactly whether it deserves your focus this week.</p>
-    <span class="tag">Think of one AI idea you are considering acting on right now</span>
+    <p class="header-sub">Three minutes. Five questions. You'll know exactly whether this idea deserves your week.</p>
+    <span class="tag">Think of one AI idea, plan, or suggestion you're considering this week</span>
   </header>
 
-  <!-- IDEA INPUT -->
   <div class="idea-section">
-    <span class="section-label">Step 1: Name the idea</span>
-    <h2>What is the AI idea or suggestion you are considering?</h2>
-    <p>Write it in one sentence. The more specific, the sharper your result will be.</p>
-    <textarea class="idea-input" id="ideaInput" placeholder="e.g. AI suggested I promote my Pinterest pins this week to drive more traffic to my site..."></textarea>
+    <h2>What's the AI idea, plan, or suggestion you're considering?</h2>
+    <p>Write it in one sentence. The questions will appear once you start typing.</p>
+    <textarea class="idea-input" id="ideaInput" placeholder="Describe it in one sentence..."></textarea>
+    <div class="idea-prompt" id="ideaPrompt">
+      <span class="idea-prompt-dot"></span>
+      <span>Start typing to unlock the five questions</span>
+    </div>
   </div>
 
-  <!-- QUESTIONS -->
-  <div class="questions-section">
+  <div class="questions-section" id="questionsSection">
     <div class="questions-header">
-      <span class="section-label">Step 2: Run the filter</span>
       <h2>Answer yes or no for each question.</h2>
-      <p>Answer honestly, not hopefully. If you answer no, a follow-up will appear to help you turn it into a commitment.</p>
+      <p>Be honest with yourself. If you answer no, a quick follow-up will appear to help you get clearer.</p>
     </div>
 
     <!-- Q1 -->
     <div class="question" data-q="1">
       <div class="q-card">
-        <div class="q-top">
-          <span class="q-num">01</span>
-          <p class="q-text">Does this move the one thing that is most stuck in your business right now?</p>
-        </div>
-        <p class="q-context">Not something interesting. Not something you could do. The specific thing that, if it moved, would change how this week feels.</p>
+        <div class="q-progress"><span>Question 1 of 5</span><div class="q-progress-bar"><div class="q-progress-fill" style="width:20%"></div></div></div>
+        <div class="q-top"><span class="q-num">01</span><p class="q-text">Is this connected to the biggest problem your business needs to solve right now?</p></div>
+        <p class="q-context">Think about what's been sitting on your mind. The thing that, if it improved, would move your business forward in a real way. Does this connect to that?</p>
         <div class="toggle-wrap">
           <button class="toggle-btn yes-btn" data-q="1" data-val="yes">Yes</button>
           <button class="toggle-btn no-btn" data-q="1" data-val="no">No</button>
         </div>
-        <p class="q-response yes-resp" data-q="1" data-type="yes">Good. It is pointed at the right target.</p>
-        <p class="q-response no-resp" data-q="1" data-type="no">If it is not moving the stuck thing, it is a distraction this week, even if it is a good idea.</p>
+        <p class="q-response yes-resp" data-q="1" data-type="yes">Good. You're pointed in the right direction.</p>
+        <p class="q-meaning" data-q="1" data-type="yes">This means your energy this week is going toward something that actually moves your business forward, not just something that keeps you busy.</p>
+        <p class="q-response no-resp" data-q="1" data-type="no">That's useful to know. Name what actually needs to be solved first, then see if this idea still fits.</p>
         <div class="commitment-wrap" data-q="1">
-          <p class="commitment-prompt">What is the one thing that is actually stuck right now?</p>
-          <input type="text" class="commitment-input" data-q="1" placeholder="e.g. My content is not reaching new people outside my existing audience..." />
+          <p class="commitment-prompt">What's the biggest problem your business actually needs to solve right now?</p>
+          <input type="text" class="commitment-input" data-q="1" placeholder="e.g. Not enough people are finding my content..." />
         </div>
       </div>
     </div>
@@ -637,20 +458,19 @@
     <!-- Q2 -->
     <div class="question" data-q="2">
       <div class="q-card">
-        <div class="q-top">
-          <span class="q-num">02</span>
-          <p class="q-text">Can you finish this in the time you actually have this week?</p>
-        </div>
-        <p class="q-context">Not ideal time. Not if everything goes well. The realistic hours available between now and the end of the week.</p>
+        <div class="q-progress"><span>Question 2 of 5</span><div class="q-progress-bar"><div class="q-progress-fill" style="width:40%"></div></div></div>
+        <div class="q-top"><span class="q-num">02</span><p class="q-text">Can you realistically get this done this week?</p></div>
+        <p class="q-context">Not in a perfect week. This week. With the time and energy you actually have right now.</p>
         <div class="toggle-wrap">
           <button class="toggle-btn yes-btn" data-q="2" data-val="yes">Yes</button>
           <button class="toggle-btn no-btn" data-q="2" data-val="no">No</button>
         </div>
-        <p class="q-response yes-resp" data-q="2" data-type="yes">It fits. Keep going.</p>
-        <p class="q-response no-resp" data-q="2" data-type="no">An idea you cannot finish this week is a distraction this week. It belongs in a future list.</p>
+        <p class="q-response yes-resp" data-q="2" data-type="yes">It fits the week you actually have. Keep going.</p>
+        <p class="q-meaning" data-q="2" data-type="yes">This means you're not setting yourself up to fail before you start. You're working with the week you have, not the week you wish you had.</p>
+        <p class="q-response no-resp" data-q="2" data-type="no">A good idea that doesn't fit this week is still a good idea. It just needs to wait. See if there's a smaller version that works now.</p>
         <div class="commitment-wrap" data-q="2">
-          <p class="commitment-prompt">What is the smallest version of this you could actually finish this week?</p>
-          <input type="text" class="commitment-input" data-q="2" placeholder="e.g. Instead of a full campaign, I will promote just two pins and see what moves..." />
+          <p class="commitment-prompt">What's the smallest version of this you could actually complete this week?</p>
+          <input type="text" class="commitment-input" data-q="2" placeholder="e.g. Instead of a full campaign, I'll write and send one email this week..." />
         </div>
       </div>
     </div>
@@ -658,20 +478,19 @@
     <!-- Q3 -->
     <div class="question" data-q="3">
       <div class="q-card">
-        <div class="q-top">
-          <span class="q-num">03</span>
-          <p class="q-text">Will you know by Friday whether it worked?</p>
-        </div>
-        <p class="q-context">There should be a clear signal, a number, a response, a visible result, that tells you if this was the right move. No signal means no plan. Just a hope.</p>
+        <div class="q-progress"><span>Question 3 of 5</span><div class="q-progress-bar"><div class="q-progress-fill" style="width:60%"></div></div></div>
+        <div class="q-top"><span class="q-num">03</span><p class="q-text">Do you know what progress looks like so you can tell if it's working?</p></div>
+        <p class="q-context">Progress doesn't have to happen by Friday. But you should be able to name what you're watching. A response, a conversation, a visible shift. Something that tells you it's moving in the right direction.</p>
         <div class="toggle-wrap">
           <button class="toggle-btn yes-btn" data-q="3" data-val="yes">Yes</button>
-          <button class="toggle-btn no-btn" data-q="3" data-val="no">No</button>
+          <button class="toggle-btn no-btn" data-q="3" data-val="no">Not yet</button>
         </div>
-        <p class="q-response yes-resp" data-q="3" data-type="yes">It is testable. That is what makes it worth doing.</p>
-        <p class="q-response no-resp" data-q="3" data-type="no">Name the signal before you start so you are not guessing at the end of the week.</p>
+        <p class="q-response yes-resp" data-q="3" data-type="yes">You know what you're watching for. That's what makes this worth starting.</p>
+        <p class="q-meaning" data-q="3" data-type="yes">This means you won't finish the week wondering if it worked. You already know what to look for, which makes AI a much more useful tool to work with on this.</p>
+        <p class="q-response no-resp" data-q="3" data-type="no">Name what you'll watch before you start. That way you'll have something concrete to look for as it moves.</p>
         <div class="commitment-wrap" data-q="3">
-          <p class="commitment-prompt">What will you watch to know if this is moving in the right direction?</p>
-          <input type="text" class="commitment-input" data-q="3" placeholder="e.g. I will watch impressions and click-throughs. If both move up by Friday, it is working..." />
+          <p class="commitment-prompt">What would tell you this is moving in the right direction, even if it takes a few weeks?</p>
+          <input type="text" class="commitment-input" data-q="3" placeholder="e.g. More people engaging with my content, or a conversation that wouldn't have happened otherwise..." />
         </div>
       </div>
     </div>
@@ -679,20 +498,19 @@
     <!-- Q4 -->
     <div class="question" data-q="4">
       <div class="q-card">
-        <div class="q-top">
-          <span class="q-num">04</span>
-          <p class="q-text">Is this your idea, or just a good-sounding AI suggestion?</p>
-        </div>
-        <p class="q-context">AI knows patterns. It does not know your business, your energy, or where you actually are right now. A suggestion that sounds right is not the same as one that is right for you.</p>
+        <div class="q-progress"><span>Question 4 of 5</span><div class="q-progress-bar"><div class="q-progress-fill" style="width:80%"></div></div></div>
+        <div class="q-top"><span class="q-num">04</span><p class="q-text">Do you understand why this matters for your business specifically right now?</p></div>
+        <p class="q-context">AI can surface great ideas. The question is whether this particular idea fits where your business actually is this week. Not whether it's a good idea in general, but whether it's the right idea for right now.</p>
         <div class="toggle-wrap">
-          <button class="toggle-btn yes-btn" data-q="4" data-val="yes">It is mine</button>
-          <button class="toggle-btn no-btn" data-q="4" data-val="no">Not sure</button>
+          <button class="toggle-btn yes-btn" data-q="4" data-val="yes">Yes</button>
+          <button class="toggle-btn no-btn" data-q="4" data-val="no">Not really</button>
         </div>
-        <p class="q-response yes-resp" data-q="4" data-type="yes">You own it. That matters more than it sounds.</p>
-        <p class="q-response no-resp" data-q="4" data-type="no">Ask yourself what you would do if AI had not suggested this. That answer tells you everything.</p>
+        <p class="q-response yes-resp" data-q="4" data-type="yes">You've thought it through. That's the difference between acting with direction and just staying busy.</p>
+        <p class="q-meaning" data-q="4" data-type="yes">This means you're not just reacting to a suggestion. You understand the connection between this idea and where your business actually needs to go. That's when AI starts working for you instead of just generating more to do.</p>
+        <p class="q-response no-resp" data-q="4" data-type="no">Good to catch that now. When you understand why it matters, AI becomes much more useful because you're giving it a real problem to work with.</p>
         <div class="commitment-wrap" data-q="4">
-          <p class="commitment-prompt">What would you focus on this week if AI had not suggested this?</p>
-          <input type="text" class="commitment-input" data-q="4" placeholder="e.g. I would probably work on improving my email open rates..." />
+          <p class="commitment-prompt">What is it about where your business is right now that makes this feel relevant?</p>
+          <input type="text" class="commitment-input" data-q="4" placeholder="e.g. I've been trying to grow my audience for months and nothing is sticking..." />
         </div>
       </div>
     </div>
@@ -700,214 +518,396 @@
     <!-- Q5 -->
     <div class="question" data-q="5">
       <div class="q-card">
-        <div class="q-top">
-          <span class="q-num">05</span>
-          <p class="q-text">If you do this and nothing else this week, will you feel like the week moved something forward?</p>
-        </div>
-        <p class="q-context">Strip everything else away. If this one thing gets done and nothing else does. Is that a week worth having?</p>
+        <div class="q-progress"><span>Question 5 of 5</span><div class="q-progress-bar"><div class="q-progress-fill" style="width:100%"></div></div></div>
+        <div class="q-top"><span class="q-num">05</span><p class="q-text">If this is the only thing you move forward this week, will it feel worth it?</p></div>
+        <p class="q-context">Sometimes one thing is actually two things that belong together. If this idea and anything directly connected to it gets done this week and nothing else does, would that feel like a good week?</p>
         <div class="toggle-wrap">
           <button class="toggle-btn yes-btn" data-q="5" data-val="yes">Yes</button>
           <button class="toggle-btn no-btn" data-q="5" data-val="no">No</button>
         </div>
-        <p class="q-response yes-resp" data-q="5" data-type="yes">That is the answer. This deserves your focus this week.</p>
-        <p class="q-response no-resp" data-q="5" data-type="no">Then this is not the right thing. The week should feel like it moved something, not just like it was busy.</p>
+        <p class="q-response yes-resp" data-q="5" data-type="yes">That's your answer. This deserves your focus this week.</p>
+        <p class="q-meaning" data-q="5" data-type="yes">This means you're not just filling your week with activity. You're choosing something that actually matters. That's exactly the kind of direction that makes AI genuinely useful.</p>
+        <p class="q-response no-resp" data-q="5" data-type="no">That feeling is worth listening to. What would need to happen alongside this for the week to feel like it moved something real?</p>
         <div class="commitment-wrap" data-q="5">
-          <p class="commitment-prompt">What would make this week feel like it actually moved something forward?</p>
-          <input type="text" class="commitment-input" data-q="5" placeholder="e.g. If I finally got my first piece of content in front of people who do not already follow me..." />
+          <p class="commitment-prompt">What would need to happen alongside this for the week to feel complete?</p>
+          <input type="text" class="commitment-input" data-q="5" placeholder="e.g. I'd also need to send my newsletter to make the week feel like it counted..." />
         </div>
       </div>
     </div>
 
   </div>
 
-  <!-- RESULT -->
+  <div class="see-result-wrap" id="seeResultWrap">
+    <button class="see-result-btn" id="seeResultBtn">See My Result</button>
+    <span class="see-result-note" id="seeResultNote"></span>
+  </div>
+
   <div class="result-section" id="resultSection">
-    <span class="section-label">Your Result</span>
+    <div class="focus-box">
+      <span class="focus-box-label">This week's focus</span>
+      <p class="focus-box-text" id="focusSummary"></p>
+    </div>
     <p class="result-idea-echo" id="ideaEcho"></p>
+    <div class="result-nudge" id="commitmentNudge"></div>
     <div class="score-row">
       <span class="score-num" id="scoreNum">0</span>
       <span class="score-denom">/ 5</span>
     </div>
+    <p class="score-interpretation" id="scoreInterpretation"></p>
     <span class="identity-label" id="identityLabel"></span>
     <p class="result-verdict" id="resultVerdict"></p>
-    <div class="reframe"><p id="reframeText"></p></div>
-    <p class="result-body" id="resultBody"></p>
+    <div class="reframe-wrap">
+      <span class="reframe-label">Your insight for this week</span>
+      <div class="reframe">
+        <p id="reframeText"></p>
+        <button class="copy-btn" id="copyBtn">Copy</button>
+      </div>
+    </div>
+    <div class="result-next">
+      <span class="result-next-label">Your next move</span>
+      <span class="result-next-text" id="resultNext"></span>
+    </div>
     <div class="commitments-echo" id="commitmentsEcho"></div>
-
-    <button class="reset-btn" id="resetBtn">Run a different idea through the filter</button>
+    <div class="reset-wrap">
+      <p class="reset-label">Want to run a different idea through the filter?</p>
+      <button class="reset-btn" id="resetBtn">Start over</button>
+      <div class="reset-confirm" id="resetConfirm">
+        <p class="reset-confirm-note">Your current result will be gone. Are you sure?</p>
+        <div class="reset-confirm-btns">
+          <button class="reset-confirm-no" id="resetNo">No, go back</button>
+          <button class="reset-confirm-yes" id="resetYes">Yes, start over</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <footer>
-    <p>Focus Week - Built for digital product creators</p>
+    <p>The clearer your focus, the more powerful your AI becomes.</p>
   </footer>
 
 </div>
-
 <script>
   const answers = {};
   const commitments = {};
+  let allFiveAnswered = false;
+  let questionsRevealed = false;
 
-  // Scroll reveal
-  const qs = document.querySelectorAll('.question');
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 90);
-        obs.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.12 });
-  qs.forEach(q => obs.observe(q));
+  const ideaInput = document.getElementById('ideaInput');
+  const questionsSection = document.getElementById('questionsSection');
+  const ideaPrompt = document.getElementById('ideaPrompt');
 
-  // Commitment inputs - save as typed
+  ideaInput.addEventListener('input', () => {
+    const val = ideaInput.value.trim();
+    if (val.length >= 5 && !questionsRevealed) {
+      questionsRevealed = true;
+      questionsSection.classList.add('revealed');
+      ideaPrompt.classList.add('hidden');
+      setTimeout(() => {
+        document.querySelectorAll('.question').forEach((q, i) => {
+          setTimeout(() => q.classList.add('visible'), i * 100);
+        });
+      }, 300);
+    } else if (val.length < 5 && questionsRevealed && Object.keys(answers).length === 0) {
+      questionsRevealed = false;
+      questionsSection.classList.remove('revealed');
+      ideaPrompt.classList.remove('hidden');
+    }
+  });
+
   document.querySelectorAll('.commitment-input').forEach(input => {
     input.addEventListener('input', () => {
       commitments[input.dataset.q] = input.value.trim();
+      if (allFiveAnswered) updateSeeResultNote();
     });
   });
 
-  // Toggles
   document.querySelectorAll('.toggle-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const q = btn.dataset.q;
       const val = btn.dataset.val;
-
-      document.querySelectorAll(`.toggle-btn[data-q="${q}"]`).forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.toggle-btn[data-q="' + q + '"]').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-
-      document.querySelectorAll(`.q-response[data-q="${q}"]`).forEach(r => r.classList.remove('show'));
-      const resp = document.querySelector(`.q-response[data-q="${q}"][data-type="${val}"]`);
+      document.querySelectorAll('.q-response[data-q="' + q + '"]').forEach(r => r.classList.remove('show'));
+      const resp = document.querySelector('.q-response[data-q="' + q + '"][data-type="' + val + '"]');
       if (resp) resp.classList.add('show');
-
+      document.querySelectorAll('.q-meaning[data-q="' + q + '"]').forEach(m => m.classList.remove('show'));
+      if (val === 'yes') {
+        const meaning = document.querySelector('.q-meaning[data-q="' + q + '"][data-type="yes"]');
+        if (meaning) meaning.classList.add('show');
+      }
       const card = btn.closest('.q-card');
       if (card) card.classList.add('answered');
-
-      // Show or hide commitment field
-      const cWrap = document.querySelector(`.commitment-wrap[data-q="${q}"]`);
+      const cWrap = document.querySelector('.commitment-wrap[data-q="' + q + '"]');
       if (cWrap) {
         if (val === 'no') {
           cWrap.classList.add('show');
         } else {
           cWrap.classList.remove('show');
-          // Clear commitment if they switch to yes
           const cInput = cWrap.querySelector('.commitment-input');
           if (cInput) cInput.value = '';
           delete commitments[q];
         }
       }
-
       answers[q] = val;
-
-      if (Object.keys(answers).length === 5) {
-        setTimeout(showResult, 300);
+      if (Object.keys(answers).length === 5 && !allFiveAnswered) {
+        allFiveAnswered = true;
+        const wrap = document.getElementById('seeResultWrap');
+        wrap.classList.add('show');
+        updateSeeResultNote();
+        setTimeout(() => wrap.scrollIntoView({ behavior: 'smooth', block: 'center' }), 200);
+      } else if (allFiveAnswered) {
+        updateSeeResultNote();
       }
     });
   });
 
-  // Commitment labels for echo
+  function updateSeeResultNote() {
+    const noQs = Object.entries(answers).filter(([k,v]) => v === 'no').map(([k]) => k);
+    const blank = noQs.filter(q => !commitments[q] || commitments[q].length < 3);
+    const noteEl = document.getElementById('seeResultNote');
+    if (blank.length > 0) {
+      noteEl.textContent = 'You have ' + blank.length + ' follow-up field' + (blank.length > 1 ? 's' : '') + ' that aren\'t filled in yet. Your result will be sharper if you fill them in first.';
+      noteEl.classList.remove('all-clear');
+    } else {
+      noteEl.textContent = 'All follow-up fields are filled in. You\'re ready.';
+      noteEl.classList.add('all-clear');
+    }
+  }
+
   const commitmentLabels = {
-    1: 'What is actually stuck',
-    2: 'Smallest version this week',
-    3: 'Signal you will watch',
-    4: 'What you would do without AI',
-    5: 'What would make the week matter'
+    1: "What actually needs to be solved",
+    2: "The smallest version this week",
+    3: "What you'll watch for progress",
+    4: "Why this matters for your business now",
+    5: "What would make this week feel complete"
   };
 
-  function showResult() {
+  // Pattern-aware result logic
+  // Key is a sorted string of no-answer question numbers e.g. "1", "2,3", "1,2,4"
+  const patterns = {
+    "": {
+      label: "Ready to Start",
+      summary: "This idea fits. Start it this week and protect it.",
+      verdict: "You came in with direction and this idea fits. Start this week.",
+      insight: "When you know what you're working toward, AI stops generating noise and starts generating exactly what you need.",
+      next: "Use AI to go deeper on this specific idea. Ask it to help you outline your first step, draft your content, or map out the details. Everything else waits."
+    },
+    "1": {
+      label: "Wrong Target This Week",
+      summary: "This idea doesn't connect to what actually needs to move right now.",
+      verdict: "The idea might be good. But it's not pointed at the right problem this week.",
+      insight: "Doing the right thing at the wrong time is still the wrong thing.",
+      next: "Go back to what you wrote in the follow-up field. That's your real target this week. Once you're clear on it, bring AI in on that specific problem and you'll get a much more useful result."
+    },
+    "2": {
+      label: "Too Much for This Week",
+      summary: "The idea is right but the scope doesn't fit the week you actually have.",
+      verdict: "This is a timing problem, not an idea problem.",
+      insight: "A plan that doesn't fit your actual week isn't a plan yet. It's a wish.",
+      next: "Look at what you wrote in the follow-up field. That's your version of this idea for this week. Start there. The bigger version waits until you have the time for it."
+    },
+    "3": {
+      label: "Name Your Signal First",
+      summary: "You know what you're doing but you haven't named what progress looks like yet.",
+      verdict: "Before you start, name the one thing you'll watch to know if this is moving.",
+      insight: "Without a signal, you can't learn from the week. You just finish it and wonder.",
+      next: "Look at what you wrote in the follow-up field. That's your signal. Write it somewhere visible before you start. When you check in, that's the only thing that matters."
+    },
+    "4": {
+      label: "Get Clear on the Why First",
+      summary: "You haven't connected this idea to where your business actually is right now.",
+      verdict: "AI surfaces ideas. You decide which ones fit. This one needs a little more thought before it earns your week.",
+      insight: "When you understand why something matters for your business specifically, AI becomes a much more precise tool to work with.",
+      next: "Look at what you wrote in the follow-up field. That's the connection you're looking for. Once you can say clearly why this matters right now, you'll know whether to start this week or wait."
+    },
+    "5": {
+      label: "Two Things, One Plan",
+      summary: "This idea has a natural companion. Lock them both in as one plan before you start.",
+      verdict: "You don't just have one task this week. You have two connected ones. That's not a problem. That's a plan.",
+      insight: "Sometimes the most focused week is two things that belong together, not one thing in isolation.",
+      next: "Look at what you wrote in the follow-up field. That's the second part of your plan. Write both tasks down in order. Do the first one, then the second. That's your week. Don't add anything else."
+    },
+    "1,2": {
+      label: "Step Back First",
+      summary: "This idea isn't connected to the right problem and it's too big for this week.",
+      verdict: "Two things need to shift before this week has a clear direction.",
+      insight: "Starting with the wrong thing and too much of it is how weeks disappear without anything moving.",
+      next: "Start with Q1. What's the actual problem your business needs to solve right now? Name that first. Then figure out what you can realistically do about it this week. Those two answers together are your plan."
+    },
+    "1,3": {
+      label: "Start Over With Clarity",
+      summary: "This idea isn't connected to the right problem and there's no signal named yet.",
+      verdict: "Before anything else, get clear on what you're actually trying to move this week.",
+      insight: "A measurable action on the wrong problem is still the wrong problem.",
+      next: "Go back to what you wrote for Q1. That's where to start. Once you know the real target, naming a signal for it becomes obvious."
+    },
+    "1,4": {
+      label: "Find the Real Problem First",
+      summary: "This idea isn't connected to the right problem and you're not sure why it matters yet.",
+      verdict: "This week needs a clearer starting point before anything else.",
+      insight: "AI can help you move fast. But fast in the wrong direction just gets you somewhere you didn't want to be.",
+      next: "Look at your Q1 follow-up answer. That's your real starting point this week. Once you know the actual problem, the direction becomes clear on its own."
+    },
+    "1,5": {
+      label: "Rethink the Week",
+      summary: "This idea isn't connected to the right problem and your week needs more than just this.",
+      verdict: "Two things are pointing you toward a different plan for this week.",
+      insight: "Clarity about what's wrong is more valuable than moving fast on the wrong thing.",
+      next: "Look at both follow-up answers. What you wrote for Q1 is your real starting point this week. What you wrote for Q5 is what needs to happen alongside it. Put those two things together and you have your real plan for this week."
+    },
+    "2,3": {
+      label: "Scope It Down and Name the Signal",
+      summary: "The idea is right but it needs to fit this week and have a clear measure of progress.",
+      verdict: "Two small adjustments and this becomes a solid plan.",
+      insight: "The best plan for this week is specific enough to finish and clear enough to measure.",
+      next: "Look at what you wrote for Q2. That's the version of this idea that actually fits this week. Look at what you wrote for Q3. That's your signal. Put those two together. That's what you're actually doing this week."
+    },
+    "2,4": {
+      label: "Scope It and Clarify the Why",
+      summary: "The scope doesn't fit this week and the connection to your business isn't clear yet.",
+      verdict: "Get clear on why this matters before you figure out how much of it to do.",
+      insight: "Doing a smaller version of the wrong thing is still the wrong thing.",
+      next: "Start with Q4. Once you know why this matters for your business right now, look at Q2 to find the version that fits this week."
+    },
+    "2,5": {
+      label: "Scope It Down and Plan Both",
+      summary: "The scope is too big for this week and there's a second task that belongs alongside it.",
+      verdict: "You need a smaller version of this idea and a plan for both tasks together.",
+      insight: "A realistic plan for two connected things beats an unrealistic plan for one.",
+      next: "Look at Q2 for the smaller version. Look at Q5 for the second task. Write both down in order. That's your week."
+    },
+    "3,4": {
+      label: "Clarify Before You Start",
+      summary: "You don't know why this matters yet and you haven't named what progress looks like.",
+      verdict: "Two things need to be named before this week has a clear plan.",
+      insight: "Starting without knowing why or how you'll measure it means the week ends with more questions than it started with.",
+      next: "Start with Q4. Once you understand why this matters for your business right now, naming a signal in Q3 becomes much easier."
+    },
+    "3,5": {
+      label: "Name the Signal and the Full Plan",
+      summary: "You have two connected tasks and you haven't named what progress looks like yet.",
+      verdict: "Lock in both tasks and name what you're watching before you start.",
+      insight: "Two connected tasks with a clear signal is a complete plan. Right now you have the tasks but not the signal.",
+      next: "Look at Q5 for your second task. Then look at Q3 and name one signal that covers both. Write it down before you start."
+    },
+    "4,5": {
+      label: "Connect the Why and the Full Plan",
+      summary: "You're not sure why this matters yet and there's a second task that belongs alongside it.",
+      verdict: "Get clear on the why first. Then plan both tasks together.",
+      insight: "When you understand why something matters, the plan for how to do it becomes obvious.",
+      next: "Start with Q4. Once that's clear, look at Q5 and add the second task. Now you have a complete plan with a reason behind it."
+    }
+  };
+
+  const defaultPattern = {
+    label: "Not the Right Week for This",
+    summary: "This idea doesn't fit right now. Your answers are pointing you somewhere else.",
+    verdict: "This isn't about whether it's a good idea. It's about whether it fits right now. It doesn't.",
+    insight: "AI works best when you bring it a clear problem. Right now the most valuable thing you can do is get clear on what that problem actually is.",
+    next: "Look at every follow-up answer you wrote. Together they're pointing you toward what your business actually needs this week. Start there. When the timing is right, this idea will be easier to execute and AI will be much more useful in helping you do it."
+  };
+
+  document.getElementById('seeResultBtn').addEventListener('click', buildResult);
+
+  function buildResult() {
     const yes = Object.values(answers).filter(v => v === 'yes').length;
-    const idea = document.getElementById('ideaInput').value.trim();
+    const idea = ideaInput.value.trim();
+    const noQs = Object.entries(answers).filter(([k,v]) => v === 'no').map(([k]) => k).sort();
+    const blank = noQs.filter(q => !commitments[q] || commitments[q].length < 3);
 
-    // Echo idea
+    // Idea echo
     const echo = document.getElementById('ideaEcho');
-    if (idea) {
-      echo.innerHTML = `Filtering: <span>"${idea}"</span>`;
-      echo.style.display = 'block';
+    echo.innerHTML = 'Filtering: <span>"' + idea + '"</span>';
+    echo.style.display = 'block';
+
+    // Commitment nudge
+    const cNudge = document.getElementById('commitmentNudge');
+    if (blank.length > 0) {
+      cNudge.textContent = 'You left ' + blank.length + ' follow-up field' + (blank.length > 1 ? 's' : '') + ' blank. Scroll back up and fill them in for a sharper result.';
+      cNudge.classList.add('show');
     } else {
-      echo.style.display = 'none';
+      cNudge.classList.remove('show');
     }
 
+    // Score
     document.getElementById('scoreNum').textContent = yes;
+    const interps = ['0 out of 5 things are in place','1 out of 5 things are in place','2 out of 5 things are in place','3 out of 5 things are in place','4 out of 5 things are in place','5 out of 5 things are in place'];
+    document.getElementById('scoreInterpretation').textContent = interps[yes];
 
-    // Identity + verdict + reframe + body
-    let label, verdict, reframe, body;
+    // Pattern lookup
+    const patternKey = noQs.join(',');
+    const result = patterns[patternKey] || defaultPattern;
 
-    if (yes === 5) {
-      label = 'The Executor';
-      verdict = 'This is the right move. Stop thinking and start.';
-      reframe = 'You are not using AI to generate ideas. You are using it to move the work forward. That is the difference.';
-      body = 'Every question passed. This idea is yours, it fits your week, it is measurable, and it is pointed at the right target. The only thing left to do is start.';
-    } else if (yes === 4) {
-      label = 'Almost Clear';
-      verdict = 'One thing is off. Your commitment below tells you exactly what to resolve first.';
-      reframe = 'A plan with one unresolved question is not a plan yet. Your answer below turns it into one.';
-      body = 'You are close. Address what you wrote in the follow-up field and this becomes a yes. Do not skip that step.';
-    } else if (yes === 3) {
-      label = 'The Scatter Pattern';
-      verdict = 'This idea is pulling your attention. It is not earning it yet.';
-      reframe = 'AI gave you something that sounds right. Your business needs something that is right. Those are not always the same thing.';
-      body = 'Three yes answers means this has appeal. But appeal is not the same as fit. Look at what you wrote in the follow-up fields. That is where the real work is this week.';
-    } else {
-      label = 'Borrowed Focus';
-      verdict = 'This is not your priority. It is an AI suggestion wearing your week.';
-      reframe = 'The most expensive thing AI can do is make a distraction feel productive.';
-      body = 'This idea came from a pattern AI recognized, not from your read on what your business needs right now. What you wrote in the follow-up fields is closer to your real priority. Start there.';
-    }
+    document.getElementById('focusSummary').textContent = result.summary;
+    document.getElementById('identityLabel').textContent = result.label;
+    document.getElementById('resultVerdict').textContent = result.verdict;
+    document.getElementById('reframeText').textContent = result.insight;
+    document.getElementById('resultNext').textContent = result.next;
 
-    document.getElementById('identityLabel').textContent = label;
-    document.getElementById('resultVerdict').textContent = verdict;
-    document.getElementById('reframeText').textContent = reframe;
-    document.getElementById('resultBody').textContent = body;
-
-    // Echo commitments
+    // Commitments echo — only filled ones
     const echoWrap = document.getElementById('commitmentsEcho');
     echoWrap.innerHTML = '';
-    const noQs = Object.entries(answers).filter(([k,v]) => v === 'no').map(([k]) => k);
-
-    if (noQs.length > 0) {
-      noQs.forEach(q => {
-        const text = commitments[q];
-        const lbl = commitmentLabels[q];
-        const placeholder = text ? text : 'Not filled in. Worth coming back to.';
-        echoWrap.innerHTML += `
-          <div class="commitment-echo-item">
-            <span class="commitment-echo-label">${lbl}</span>
-            <p class="commitment-echo-text">${placeholder}</p>
-          </div>`;
-      });
-    }
+    noQs.forEach(q => {
+      const text = commitments[q];
+      if (text && text.length >= 3) {
+        echoWrap.innerHTML += '<div class="commitment-echo-item"><span class="commitment-echo-label">' + commitmentLabels[q] + '</span><p class="commitment-echo-text">' + text + '</p></div>';
+      }
+    });
 
     const section = document.getElementById('resultSection');
     section.classList.add('show');
     setTimeout(() => section.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
   }
 
-  // CTA save result
-  const ctaBtn = document.getElementById('ctaBtn');
-  if (ctaBtn) {
-    ctaBtn.addEventListener('click', () => {
-      const email = document.getElementById('ctaEmail').value.trim();
-      if (!email || !email.includes('@')) return;
-      window.location.href = `https://align-with-clarity.kit.com/2ce6d87e63?email=${encodeURIComponent(email)}`;
-    });
-  }
+  // Copy reframe
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    const text = document.getElementById('reframeText').textContent;
+    const btn = document.getElementById('copyBtn');
+    const success = () => {
+      btn.textContent = 'Copied';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    };
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(success).catch(() => { fallback(); success(); });
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+      success();
+    }
+  });
 
   // Reset
   document.getElementById('resetBtn').addEventListener('click', () => {
+    document.getElementById('resetBtn').style.display = 'none';
+    document.getElementById('resetConfirm').classList.add('show');
+  });
+
+  document.getElementById('resetNo').addEventListener('click', () => {
+    document.getElementById('resetBtn').style.display = 'inline-block';
+    document.getElementById('resetConfirm').classList.remove('show');
+  });
+
+  document.getElementById('resetYes').addEventListener('click', () => {
     Object.keys(answers).forEach(k => delete answers[k]);
     Object.keys(commitments).forEach(k => delete commitments[k]);
+    allFiveAnswered = false; questionsRevealed = false;
     document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.q-response').forEach(r => r.classList.remove('show'));
+    document.querySelectorAll('.q-meaning').forEach(m => m.classList.remove('show'));
     document.querySelectorAll('.q-card').forEach(c => c.classList.remove('answered'));
     document.querySelectorAll('.commitment-wrap').forEach(w => w.classList.remove('show'));
     document.querySelectorAll('.commitment-input').forEach(i => i.value = '');
+    document.querySelectorAll('.question').forEach(q => q.classList.remove('visible'));
     document.getElementById('resultSection').classList.remove('show');
-    document.getElementById('saveEmail').value = '';
-    document.getElementById('saveEmail').disabled = false;
-    document.getElementById('saveBtn').disabled = false;
-    document.getElementById('saveBtn').style.opacity = '1';
-    document.getElementById('saveConfirm').classList.remove('show');
-    const ctaEmail = document.getElementById('ctaEmail');
-    document.getElementById('ideaInput').value = '';
+    document.getElementById('seeResultWrap').classList.remove('show');
+    document.getElementById('seeResultNote').textContent = '';
+    document.getElementById('seeResultNote').classList.remove('all-clear');
+    document.getElementById('resetBtn').style.display = 'inline-block';
+    document.getElementById('resetConfirm').classList.remove('show');
+    ideaInput.value = '';
+    questionsSection.classList.remove('revealed');
+    ideaPrompt.classList.remove('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 </script>
